@@ -1,0 +1,19 @@
+# Power BI
+*.pbix
+*.rsd
+*.pbit
+*~$
+
+# Power BI Project (opcional manter)
+# Se quiser versionar .pbip, remova as linhas abaixo
+*.pbip
+*.pbir
+*.SemanticModel
+*.Report
+.PowerBIUser.json
+
+# SO / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
