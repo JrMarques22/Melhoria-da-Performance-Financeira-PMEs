@@ -1,0 +1,4 @@
+ProdutoID,NomeProduto,Categoria,CustoUnitario,PrecoUnitario
+1,Produto A,Cat A,300,500
+2,Produto B,Cat B,600,1000
+3,Produto C,Cat C,800,1200
