@@ -1,0 +1,6 @@
+ContaID,NomeConta,Tipo
+1,Receita,Financeira
+2,Custo,Operacional
+3,Despesa,Operacional
+4,Passivo,Financeira
+5,Patrimonio,Financeira
