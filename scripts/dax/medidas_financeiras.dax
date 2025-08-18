@@ -1,0 +1,78 @@
+-- ===========================
+-- Medidas Financeiras (PME)
+-- ===========================
+
+-- Receitas, Custos e Despesas
+Receita Total =
+CALCULATE(
+    SUM(Fato_Financeiro[Valor]),
+    Fato_Financeiro[Conta_Contabil] = "Receita"
+)
+
+Custo Total =
+CALCULATE(
+    -- se custos vierem negativos no fato, inverta o sinal
+    VAR v = SUM(Fato_Financeiro[Valor])
+    RETURN IF(v < 0, -v, v),
+    Fato_Financeiro[Conta_Contabil] = "Custo"
+)
+
+Despesas Opex =
+CALCULATE(
+    VAR v = SUM(Fato_Financeiro[Valor])
+    RETURN IF(v < 0, -v, v),
+    Fato_Financeiro[Conta_Contabil] = "Despesa"
+)
+
+-- Lucros e Margens
+Lucro Bruto = [Receita Total] - [Custo Total]
+
+Margem Bruta % = DIVIDE([Lucro Bruto], [Receita Total])
+
+Lucro Líquido = [Lucro Bruto] - [Despesas Opex]
+
+Margem Líquida % = DIVIDE([Lucro Líquido], [Receita Total])
+
+-- Fluxo de Caixa Operacional (simplificado: entradas - saídas operacionais)
+Fluxo Caixa Operacional =
+VAR Entradas =
+    CALCULATE(SUM(Fato_Financeiro[Valor]), Fato_Financeiro[Conta_Contabil] = "Receita")
+VAR SaidasOpex =
+    CALCULATE(
+        VAR v = SUM(Fato_Financeiro[Valor])
+        RETURN IF(v < 0, -v, v),
+        Fato_Financeiro[Conta_Contabil] IN {"Custo","Despesa"}
+    )
+RETURN Entradas - SaidasOpex
+
+-- Endividamento (Dívida / Patrimônio) - usa lançamentos de balanço
+Endividamento =
+DIVIDE(
+    CALCULATE(
+        VAR v = SUM(Fato_Financeiro[Valor])
+        RETURN IF(v < 0, -v, v),
+        Fato_Financeiro[Conta_Contabil] = "Passivo"
+    ),
+    CALCULATE(
+        VAR v = SUM(Fato_Financeiro[Valor])
+        RETURN IF(v < 0, -v, v),
+        Fato_Financeiro[Conta_Contabil] = "Patrimonio"
+    )
+)
+
+-- Time Intelligence (requer tabela de datas marcada)
+Receita MTD = TOTALMTD([Receita Total], Dim_Data[Data])
+Receita YTD = TOTALYTD([Receita Total], Dim_Data[Data])
+
+Receita LY =
+CALCULATE([Receita Total], DATEADD(Dim_Data[Data], -1, YEAR))
+
+Crescimento Receita % =
+DIVIDE([Receita Total] - [Receita LY], [Receita LY])
+
+Lucro Líquido MTD = TOTALMTD([Lucro Líquido], Dim_Data[Data])
+Lucro Líquido YTD = TOTALYTD([Lucro Líquido], Dim_Data[Data])
+
+Margem Bruta % YTD =
+DIVIDE([Lucro Bruto] - CALCULATE([Lucro Bruto], DATEADD(Dim_Data[Data], -1, YEAR)),
+       CALCULATE([Receita Total], DATEADD(Dim_Data[Data], -1, YEAR)))
