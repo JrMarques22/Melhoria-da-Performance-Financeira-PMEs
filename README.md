@@ -34,3 +34,7 @@ Projeto de análise de indicadores financeiros para PMEs no Power BI, com modelo
 
 ## Licença
 MIT (ver LICENSE).
+
+Segue o link do painel concluído: 
+https://app.powerbi.com/view?r=eyJrIjoiNzA5ODFiOWItZjdmNi00NDFmLWFmOWYtYzI5ODIwNzdlMGU4IiwidCI6IjA0NTY1NWFlLTRmODEtNDQwZi05MWFjLTk4NmU5M2YwYzE5MyJ9
+
